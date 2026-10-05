@@ -2,19 +2,19 @@ package co.edu.unbosque.model;
 
 import java.util.List;
 
-public class Cabaña extends Alojamiento {
-	private double tarifaServicio;
+public class Finca extends Alojamiento {
+	private double tarifaPiscina;
 
-	public Cabaña(String id, String nombre, String ciudad, String tipo, String ubicacion, int capacidad,
+	public Finca(String id, String nombre, String ciudad, String tipo, String ubicacion, int capacidad,
 			double preciopornoche, boolean activo, String descripcion, List<String> serviciosAdicionales,
-			String activo2, String inactivo, double tarifaServicio) {
+			String activo2, String inactivo, double tarifaPiscina) {
 		super(id, nombre, ciudad, tipo, ubicacion, capacidad, preciopornoche, activo, descripcion, serviciosAdicionales,
 				activo2, inactivo);
-		this.tarifaServicio = tarifaServicio;
+		this.tarifaPiscina = tarifaPiscina;
 	}
 
 	@Override
 	public double calcularValorReserva(int noches) {
-		return super.calcularValorReserva(noches) + tarifaServicio;
+		return super.calcularValorReserva(noches) + tarifaPiscina;
 	}
 }
