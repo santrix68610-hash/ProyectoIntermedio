@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 abstract class Alojamiento {
-    private String id;
+    private String idAlojamiento;
     private String Nombre;
     private String Ciudad;
     private String Tipo;
@@ -16,11 +16,11 @@ abstract class Alojamiento {
     private List<String> ServiciosAdicionales = new ArrayList<>();
     public String Activo;
     public String Inactivo;
-    public Alojamiento(String id, String nombre, String ciudad, String tipo, String ubicacion, int capacidad,
+    public Alojamiento(String idAlojamiento, String nombre, String ciudad, String tipo, String ubicacion, int capacidad,
             double preciopornoche, boolean activo, String descripcion, List<String> serviciosAdicionales,
             String activo2, String inactivo) {
         super();
-		this.id = id;
+		this.idAlojamiento = idAlojamiento;
 		Nombre = nombre;
 		Ciudad = ciudad;
 		Tipo = tipo;
@@ -51,11 +51,12 @@ abstract class Alojamiento {
         return false;
         }
     }
-	public String getId() {
-		return id;
+
+	public String getIdAlojamiento() {
+		return idAlojamiento;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setIdAlojamiento(String idAlojamiento) {
+		this.idAlojamiento = idAlojamiento;
 	}
 	public String getNombre() {
 		return Nombre;

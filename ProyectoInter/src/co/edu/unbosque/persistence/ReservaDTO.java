@@ -16,6 +16,8 @@ public class ReservaDTO {
 	private int numeroNoches;
 	private double valorTotal;
 	private String estado;
+	public Object getHuesped;
+
 	public ReservaDTO(String id, Huesped huesped, AlojamientoDTO alojamiento, String fechaLlegada, String fechaSalida,
 			int numeroHuespedes, int numeroNoches, double valorTotal, String estado) {
 		super();
@@ -28,6 +30,12 @@ public class ReservaDTO {
 		this.numeroNoches = numeroNoches;
 		this.valorTotal = valorTotal;
 		this.estado = estado;
+	}	
+	public Object getGetHuesped() {
+		return getHuesped;
+	}
+	public void setGetHuesped(Object getHuesped) {
+		this.getHuesped = getHuesped;
 	}
 	public String getId() {
 		return id;
@@ -88,6 +96,10 @@ public class ReservaDTO {
 	}
 	public static String getCancelada() {
 		return CANCELADA;
+	}
+	public String getidAlojamiento() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 
