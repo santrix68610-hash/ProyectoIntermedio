@@ -17,9 +17,13 @@ public class ReservaDTO {
 	private double valorTotal;
 	private String estado;
 	public Object getHuesped;
+	private String idHuesped;
+	private String idAlojamiento;
+
 
 	public ReservaDTO(String id, Huesped huesped, AlojamientoDTO alojamiento, String fechaLlegada, String fechaSalida,
-			int numeroHuespedes, int numeroNoches, double valorTotal, String estado) {
+			int numeroHuespedes, int numeroNoches, double valorTotal, String estado, Object getHuesped,
+			String idHuesped, String idAlojamiento) {
 		super();
 		this.id = id;
 		this.huesped = huesped;
@@ -30,7 +34,32 @@ public class ReservaDTO {
 		this.numeroNoches = numeroNoches;
 		this.valorTotal = valorTotal;
 		this.estado = estado;
-	}	
+		this.getHuesped = getHuesped;
+		this.idHuesped = idHuesped;
+		this.idAlojamiento = idAlojamiento;
+	}
+	
+	public ReservaDTO(String string, String string2, String string3, String string4, String string5, int int1, int int2,
+			double double1, String string6) {
+		// TODO Auto-generated constructor stub
+	}
+
+	public String getIdHuesped() {
+		return idHuesped;
+	}
+
+	public void setIdHuesped(String idHuesped) {
+		this.idHuesped = idHuesped;
+	}
+
+	public String getIdAlojamiento() {
+		return idAlojamiento;
+	}
+
+	public void setIdAlojamiento(String idAlojamiento) {
+		this.idAlojamiento = idAlojamiento;
+	}
+
 	public Object getGetHuesped() {
 		return getHuesped;
 	}
