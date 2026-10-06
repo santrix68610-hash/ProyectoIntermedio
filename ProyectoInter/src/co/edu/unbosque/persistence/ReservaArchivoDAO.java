@@ -70,7 +70,6 @@ public class ReservaArchivoDAO implements ReservaDAO {
 	    boolean encontrada = false;
 
 	    for (int i = 0; i < lineas.size(); i++) {
-	        String[] datos = lineas.get(i).split(";");
 
 	        if (datos.length == 9 && datos[0].equals(reserva.getId())) {
 	            lineas.set(i, convertirARegistro(reserva));

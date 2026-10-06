@@ -1,12 +1,6 @@
 package co.edu.unbosque.persistence;
 
-import co.edu.unbosque.model.Huesped;
-
 public class ReservaDTO {
-
-	public static final String CONFIRMADA = "CONFIRMADA";
-	public static final String CANCELADA = "CANCELADA";
-
 	private String id;
 	private String idHuesped;
 	private String idAlojamiento;
@@ -17,17 +11,18 @@ public class ReservaDTO {
 	private double valorTotal;
 	private String estado;
 
-	public ReservaDTO(String id, String idHuesped, String idAlojamiento, String fechaLlegada, String fechaSalida,
-			int numeroHuespedes, int numeroNoches, double valorTotal, String estado) {
-		this.id = id;
-		this.idHuesped = idHuesped;
-		this.idAlojamiento = idAlojamiento;
-		this.fechaLlegada = fechaLlegada;
-		this.fechaSalida = fechaSalida;
-		this.numeroHuespedes = numeroHuespedes;
-		this.numeroNoches = numeroNoches;
-		this.valorTotal = valorTotal;
-		this.estado = estado;
+	public ReservaDTO(String id, String idHuesped, String idAlojamiento,
+	        String fechaLlegada, String fechaSalida, int numeroHuespedes,
+	        int numeroNoches, double valorTotal, String estado) {
+	    this.id = id;
+	    this.idHuesped = idHuesped;
+	    this.idAlojamiento = idAlojamiento;
+	    this.fechaLlegada = fechaLlegada;
+	    this.fechaSalida = fechaSalida;
+	    this.numeroHuespedes = numeroHuespedes;
+	    this.numeroNoches = numeroNoches;
+	    this.valorTotal = valorTotal;
+	    this.estado = estado;
 	}
 
 	public String getId() {
