@@ -4,19 +4,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class HuespedArchivoDAO implements HuespedDAO {
-    private String nombreArchivo = "huespedes.txt";
-    private ArchivoTexto archivoTexto = new ArchivoTexto();
+	private String nombreArchivo = "huespedes.txt";
+	private ArchivoTexto archivoTexto = new ArchivoTexto();
 
-    private String convertirARegistro(HuespedDTO huesped) {
-        return huesped.getId() + ";"
-                + huesped.getNombre() + ";"
-                + huesped.getApellido() + ";"
-                + huesped.getCorreo() + ";"
-                + huesped.getTelefono();
-    }
+	private String convertirARegistro(HuespedDTO huesped) {
+		return huesped.getId() + ";" + huesped.getNombre() + ";" + huesped.getApellido() + ";" + huesped.getCorreo()
+				+ ";" + huesped.getTelefono();
+	}
 
-    @Override
-	public ArrayList<HuespedDTO> cargarTodas() throws IOException {
+	@Override
+    public ArrayList<HuespedDTO> cargarTodos() throws IOException {
         ArrayList<HuespedDTO> huespedes = new ArrayList<HuespedDTO>();
         ArrayList<String> lineas = archivoTexto.leerLineas(nombreArchivo);
 
@@ -34,35 +31,34 @@ public class HuespedArchivoDAO implements HuespedDAO {
         return huespedes;
     }
 
-    @Override
-    public HuespedDTO buscarPorId(String id) throws IOException {
-        ArrayList<HuespedDTO> huespedes = cargarTodos();
+	@Override
+	public HuespedDTO buscarPorId(String id) throws IOException {
+		ArrayList<HuespedDTO> huespedes = cargarTodos();
 
-        for (HuespedDTO huesped : huespedes) {
-            if (huesped.getId().equals(id)) {
-                return huesped;
-            }
-        }
+		for (HuespedDTO huesped : huespedes) {
+			if (huesped.getId().equals(id)) {
+				return huesped;
+			}
+		}
 
-        return null;
-    }
-
-    @Override
-    public boolean guardar(HuespedDTO huesped) throws IOException {
-        ArrayList<String> lineas = archivoTexto.leerLineas(nombreArchivo);
-
-        for (String linea : lineas) {
-            String[] datos = linea.split(";");
-
-            if (datos.length == 5 && datos[0].equals(huesped.getId())) {
-                return false;
-            }
-        }
-
-        lineas.add(convertirARegistro(huesped));
-        archivoTexto.escribirLineas(nombreArchivo, lineas);
-        return true;
-    }
-
-	
+		return null;
 	}
+
+	@Override
+	public boolean guardar(HuespedDTO huesped) throws IOException {
+		ArrayList<String> lineas = archivoTexto.leerLineas(nombreArchivo);
+
+		for (String linea : lineas) {
+			String[] datos = linea.split(";");
+
+			if (datos.length == 5 && datos[0].equals(huesped.getId())) {
+				return false;
+			}
+		}
+
+		lineas.add(convertirARegistro(huesped));
+		archivoTexto.escribirLineas(nombreArchivo, lineas);
+		return true;
+	}
+
+}
