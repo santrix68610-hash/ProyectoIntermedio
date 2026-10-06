@@ -35,9 +35,9 @@ public class ReservaArchivoDAO implements ReservaDAO {
 	@Override
 	public ReservaDTO buscarPorId(String id) throws IOException {
 		ArrayList<ReservaDTO> iDsearch = cargarTodas();
-		for(i=0; i<reserva.size(); i++){
-			if (reserva.getId().equals(id)) {
-	            return reserva;
+		for(i=0; i<iDsearch.size(); i++){
+			if (iDsearch.getId().equals(id)) {
+	            return iDsearch;
 	        }
 		}
 		
