@@ -33,6 +33,9 @@ public class AlojamientoDTO {
 		    this.ServiciosAdicionales.addAll(serviciosAdicionales);
 		}
 	}
+	public AlojamientoDTO(String string, String string2, String string3, String string4, String string5, int int1,
+			double double1, boolean boolean1, String string6) {
+	}
 	public String getId() {
 		return id;
 	}
