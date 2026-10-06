@@ -34,56 +34,54 @@ public class ReservaArchivoDAO implements ReservaDAO {
 
 	@Override
 	public ReservaDTO buscarPorId(String id) throws IOException {
-	    ArrayList<ReservaDTO> reservas = cargarTodas();
+		ArrayList<ReservaDTO> reservas = cargarTodas();
 
-	    for (int i = 0; i < reservas.size(); i++) {
-	        ReservaDTO reserva = reservas.get(i);
+		for (ReservaDTO reserva : reservas) {
+			if (reserva.getId().equals(id)) {
+				return reserva;
+			}
+		}
 
-	        if (reserva.getId().equals(id)) {
-	            return reserva;
-	        }
-	    }
-
-	    return null;
+		return null;
 	}
 
 	@Override
 	public boolean guardar(ReservaDTO reserva) throws IOException {
-	    ArrayList<ReservaDTO> reservasExistentes = cargarTodas();
+		ArrayList<String> lineas = archivoTexto.leerLineas(nombreArchivo);
 
-	    for (int i = 0; i < reservasExistentes.size(); i++) {
-	        if (reservasExistentes.get(i).getId().equals(reserva.getId())) {
-	            return false; 
-	        }
-	    }
+		for (String linea : lineas) {
+			String[] datos = linea.split(";");
 
-	    ArrayList<String> lineas = archivoTexto.leerLineas(nombreArchivo);
-	    lineas.add(convertirARegistro(reserva));
-	    archivoTexto.escribirLineas(nombreArchivo, lineas);
+			if (datos.length == 9 && datos[0].equals(reserva.getId())) {
+				return false;
+			}
+		}
 
-	    return true;
+		lineas.add(convertirARegistro(reserva));
+		archivoTexto.escribirLineas(nombreArchivo, lineas);
+		return true;
 	}
 
 	@Override
 	public boolean actualizar(ReservaDTO reserva) throws IOException {
-	    ArrayList<String> lineas = archivoTexto.leerLineas(nombreArchivo);
-	    boolean encontrada = false;
+		ArrayList<String> lineas = archivoTexto.leerLineas(nombreArchivo);
+		boolean encontrada = false;
 
-	    for (int i = 0; i < lineas.size(); i++) {
+		for (int i = 0; i < lineas.size(); i++) {
+			String[] datos = lineas.get(i).split(";");
+			if (datos.length == 9 && datos[0].equals(reserva.getId())) {
+				lineas.set(i, convertirARegistro(reserva));
+				encontrada = true;
+				break;
+			}
+		}
 
-	        if (datos.length == 9 && datos[0].equals(reserva.getId())) {
-	            lineas.set(i, convertirARegistro(reserva));
-	            encontrada = true;
-	            break;
-	        }
-	    }
+		if (!encontrada) {
+			return false;
+		}
 
-	    if (!encontrada) {
-	        return false;
-	    }
-
-	    archivoTexto.escribirLineas(nombreArchivo, lineas);
-	    return true;
+		archivoTexto.escribirLineas(nombreArchivo, lineas);
+		return true;
 	}
 
 }
