@@ -1,8 +1,10 @@
 package co.edu.unbosque.persistence;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -28,4 +30,15 @@ public class ArchivoTexto {
 	    lector.close();
 	    return lineas;
 	}
+	public void escribirLineas(String nombreArchivo, ArrayList<String> lineas) throws IOException {
+	    BufferedWriter escritor = new BufferedWriter(new FileWriter(nombreArchivo));
+
+	    for (int i = 0; i < lineas.size(); i++) {
+	        escritor.write(lineas.get(i));
+	        escritor.newLine();
+	    }
+
+	    escritor.close();
+	}
+
 }

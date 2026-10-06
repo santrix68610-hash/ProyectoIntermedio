@@ -34,23 +34,57 @@ public class ReservaArchivoDAO implements ReservaDAO {
 
 	@Override
 	public ReservaDTO buscarPorId(String id) throws IOException {
-		ArrayList<ReservaDTO> iDsearch = cargarTodas();
-		for(i=0; i<iDsearch.size(); i++){
-			if (iDsearch.getId().equals(id)) {
-	            return iDsearch;
+	    ArrayList<ReservaDTO> reservas = cargarTodas();
+
+	    for (int i = 0; i < reservas.size(); i++) {
+	        ReservaDTO reserva = reservas.get(i);
+
+	        if (reserva.getId().equals(id)) {
+	            return reserva;
 	        }
-		}
-		
-		return null;
+	    }
+
+	    return null;
 	}
 
 	@Override
 	public boolean guardar(ReservaDTO reserva) throws IOException {
-		return false;
+	    ArrayList<ReservaDTO> reservasExistentes = cargarTodas();
+
+	    for (int i = 0; i < reservasExistentes.size(); i++) {
+	        if (reservasExistentes.get(i).getId().equals(reserva.getId())) {
+	            return false; 
+	        }
+	    }
+
+	    ArrayList<String> lineas = archivoTexto.leerLineas(nombreArchivo);
+	    lineas.add(convertirARegistro(reserva));
+	    archivoTexto.escribirLineas(nombreArchivo, lineas);
+
+	    return true;
 	}
 
 	@Override
 	public boolean actualizar(ReservaDTO reserva) throws IOException {
-		return false;
+	    ArrayList<String> lineas = archivoTexto.leerLineas(nombreArchivo);
+	    boolean encontrada = false;
+
+	    for (int i = 0; i < lineas.size(); i++) {
+	        String[] datos = lineas.get(i).split(";");
+
+	        if (datos.length == 9 && datos[0].equals(reserva.getId())) {
+	            lineas.set(i, convertirARegistro(reserva));
+	            encontrada = true;
+	            break;
+	        }
+	    }
+
+	    if (!encontrada) {
+	        return false;
+	    }
+
+	    archivoTexto.escribirLineas(nombreArchivo, lineas);
+	    return true;
 	}
+
 }
