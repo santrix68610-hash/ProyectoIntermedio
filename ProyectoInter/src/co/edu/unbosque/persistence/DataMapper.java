@@ -12,4 +12,5 @@ public class DataMapper {
 		return new Huesped(huespedDTO.getId(), huespedDTO.getNombre(), huespedDTO.getApellido(), huespedDTO.getCorreo(),
 				huespedDTO.getTelefono());
 	}
+	
 }
