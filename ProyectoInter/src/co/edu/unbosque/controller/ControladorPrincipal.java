@@ -7,19 +7,23 @@ import co.edu.unbosque.model.Alojamiento;
 import co.edu.unbosque.model.AlojamientoServicio;
 import co.edu.unbosque.model.Huesped;
 import co.edu.unbosque.model.HuespedServicio;
+import co.edu.unbosque.model.ReporteServicio;
 import co.edu.unbosque.model.ReservaServicio;
+import co.edu.unbosque.persistence.ReservaDTO;
 
 public class ControladorPrincipal {
 
 	private AlojamientoServicio alojamientoServicio;
 	private HuespedServicio huespedServicio;
 	private ReservaServicio reservaServicio;
+	private ReporteServicio reporteServicio;
 	private VistaConsola vista;
 
 	public ControladorPrincipal() {
 		alojamientoServicio = new AlojamientoServicio();
 		huespedServicio = new HuespedServicio();
 		reservaServicio = new ReservaServicio();
+		reporteServicio = new ReporteServicio();
 		vista = new VistaConsola();
 	}
 
@@ -65,6 +69,27 @@ public class ControladorPrincipal {
 			} else if (opcion == 6) {
 				vista.mostrarReservas(reservaServicio.consultarReservas());
 
+			} else if (opcion == 7) {
+				cancelarReserva();
+
+			} else if (opcion == 8) {
+				vista.mostrarHuespedes(huespedServicio.consultarTodos());
+
+			} else if (opcion == 9) {
+				ArrayList<ReservaDTO> reservas = reservaServicio.consultarReservas();
+
+				int confirmadas = reporteServicio.contarReservasConfirmadas(reservas);
+				int canceladas = reporteServicio.contarReservasCanceladas(reservas);
+
+				vista.mostrarReporteEstadosReservas(confirmadas, canceladas);
+
+			} else if (opcion == 10) {
+				ArrayList<ReservaDTO> reservas = reservaServicio.consultarReservas();
+
+				double ingresos = reporteServicio.calcularIngresosConfirmados(reservas);
+
+				vista.mostrarReporteIngresosConfirmados(ingresos);
+
 			} else if (opcion != 0) {
 				vista.mostrarMensaje("Opción no válida.");
 			}
@@ -89,7 +114,7 @@ public class ControladorPrincipal {
 			vista.mostrarMensaje("Reserva creada correctamente.");
 		} else {
 			vista.mostrarMensaje(
-					"No se pudo crear la reserva. Revisa los IDs, " + "el estado y la capacidad del alojamiento.");
+					"No se pudo crear la reserva. Revisa los IDs, el estado y la capacidad del alojamiento.");
 		}
 	}
 
@@ -101,13 +126,23 @@ public class ControladorPrincipal {
 		String telefono = vista.leerTexto("Teléfono: ");
 
 		Huesped huesped = new Huesped(id, nombre, apellido, correo, telefono);
-
 		boolean guardado = huespedServicio.registrarHuesped(huesped);
 
 		if (guardado) {
 			vista.mostrarMensaje("Huésped registrado correctamente.");
 		} else {
 			vista.mostrarMensaje("No se pudo registrar el huésped.");
+		}
+	}
+
+	private void cancelarReserva() throws IOException {
+		String id = vista.leerTexto("ID de la reserva que quieres cancelar: ");
+		boolean cancelada = reservaServicio.cancelarReserva(id);
+
+		if (cancelada) {
+			vista.mostrarMensaje("Reserva cancelada correctamente.");
+		} else {
+			vista.mostrarMensaje("No se pudo cancelar. Revisa el ID y confirma que la reserva no esté cancelada.");
 		}
 	}
 
