@@ -13,29 +13,30 @@ public class HuespedArchivoDAO implements HuespedDAO {
 	}
 
 	@Override
-    public ArrayList<HuespedDTO> cargarTodos() throws IOException {
-        ArrayList<HuespedDTO> huespedes = new ArrayList<HuespedDTO>();
-        ArrayList<String> lineas = archivoTexto.leerLineas(nombreArchivo);
+	public ArrayList<HuespedDTO> cargarTodos() throws IOException {
+		ArrayList<HuespedDTO> huespedes = new ArrayList<HuespedDTO>();
+		ArrayList<String> lineas = archivoTexto.leerLineas(nombreArchivo);
 
-        for (String linea : lineas) {
-            String[] datos = linea.split(";");
+		for (int i = 0; i < lineas.size(); i++) {
+			String[] datos = lineas.get(i).split(";", -1);
 
-            if (datos.length == 5) {
-                HuespedDTO huesped = new HuespedDTO(
-                        datos[0], datos[1], datos[2], datos[3], datos[4]);
+			if (datos.length == 5) {
+				HuespedDTO huesped = new HuespedDTO(datos[0], datos[1], datos[2], datos[3], datos[4]);
 
-                huespedes.add(huesped);
-            }
-        }
+				huespedes.add(huesped);
+			}
+		}
 
-        return huespedes;
-    }
+		return huespedes;
+	}
 
 	@Override
 	public HuespedDTO buscarPorId(String id) throws IOException {
 		ArrayList<HuespedDTO> huespedes = cargarTodos();
 
-		for (HuespedDTO huesped : huespedes) {
+		for (int i = 0; i < huespedes.size(); i++) {
+			HuespedDTO huesped = huespedes.get(i);
+
 			if (huesped.getId().equals(id)) {
 				return huesped;
 			}
@@ -48,8 +49,8 @@ public class HuespedArchivoDAO implements HuespedDAO {
 	public boolean guardar(HuespedDTO huesped) throws IOException {
 		ArrayList<String> lineas = archivoTexto.leerLineas(nombreArchivo);
 
-		for (String linea : lineas) {
-			String[] datos = linea.split(";");
+		for (int i = 0; i < lineas.size(); i++) {
+			String[] datos = lineas.get(i).split(";", -1);
 
 			if (datos.length == 5 && datos[0].equals(huesped.getId())) {
 				return false;
@@ -58,7 +59,7 @@ public class HuespedArchivoDAO implements HuespedDAO {
 
 		lineas.add(convertirARegistro(huesped));
 		archivoTexto.escribirLineas(nombreArchivo, lineas);
+
 		return true;
 	}
-
 }
