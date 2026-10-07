@@ -38,35 +38,32 @@ public class AlojamientoServicio {
 		return new ArrayList<Alojamiento>(alojamientos);
 	}
 
-	public ArrayList<Alojamiento> buscar(String ciudad, String tipo, int numeroHuespedes) {
+	public ArrayList<Alojamiento> buscar(
+	        String ciudad, String tipo, int capacidadMinima, double precioMaximo) {
 
-		ArrayList<Alojamiento> encontrados = new ArrayList<Alojamiento>();
+	    ArrayList<Alojamiento> encontrados = new ArrayList<Alojamiento>();
 
-		for (int i = 0; i < alojamientos.size(); i++) {
-			Alojamiento alojamiento = alojamientos.get(i);
+	    for (int i = 0; i < alojamientos.size(); i++) {
+	        Alojamiento alojamiento = alojamientos.get(i);
 
-			boolean coincideCiudad = true;
-			boolean coincideTipo = true;
-			boolean tieneCapacidad = true;
+	        boolean coincideCiudad = ciudad == null  ciudad.trim().isEmpty()
+	                 alojamiento.getCiudad().equalsIgnoreCase(ciudad.trim());
 
-			if (ciudad != null && !ciudad.trim().isEmpty()) {
-				coincideCiudad = alojamiento.getCiudad().equalsIgnoreCase(ciudad.trim());
-			}
+	        boolean coincideTipo = tipo == null  tipo.trim().isEmpty()
+	                 alojamiento.getTipo().equalsIgnoreCase(tipo.trim());
 
-			if (tipo != null && !tipo.trim().isEmpty()) {
-				coincideTipo = alojamiento.getTipo().equalsIgnoreCase(tipo.trim());
-			}
+	        boolean cumpleCapacidad = capacidadMinima <= 0
+	                 alojamiento.getCapacidad() >= capacidadMinima;
 
-			if (numeroHuespedes > 0) {
-				tieneCapacidad = alojamiento.PuedeResivir(numeroHuespedes);
-			}
+	        boolean cumplePrecio = precioMaximo <= 0
+	                 alojamiento.getPreciopornoche() <= precioMaximo;
 
-			if (coincideCiudad && coincideTipo && tieneCapacidad) {
-				encontrados.add(alojamiento);
-			}
-		}
+	        if (coincideCiudad && coincideTipo && cumpleCapacidad && cumplePrecio) {
+	            encontrados.add(alojamiento);
+	        }
+	    }
 
-		return encontrados;
+	    return encontrados;
 	}
 
 	public Alojamiento consultarDetalle(String id) {
