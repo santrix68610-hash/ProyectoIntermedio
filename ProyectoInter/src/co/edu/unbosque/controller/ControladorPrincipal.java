@@ -60,6 +60,9 @@ public class ControladorPrincipal {
 			} else if (opcion == 5) {
 				registrarHuesped();
 
+			} else if (opcion == 6) {
+				vista.mostrarReservas(reservaServicio.consultarReservas());
+
 			} else if (opcion != 0) {
 				vista.mostrarMensaje("Opción no válida.");
 			}
