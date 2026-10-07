@@ -3,7 +3,7 @@ package co.edu.unbosque.model;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class Alojamiento {
+public abstract class Alojamiento {
     private String idAlojamiento;
     private String Nombre;
     private String Ciudad;
