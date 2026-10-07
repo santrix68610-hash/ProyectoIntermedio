@@ -1,6 +1,8 @@
 package co.edu.unbosque.model;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 import co.edu.unbosque.persistence.ReservaArchivoDAO;
@@ -9,73 +11,120 @@ import co.edu.unbosque.persistence.ReservaDTO;
 
 public class ReservaServicio {
 	private ReservaDAO reservaDAO;
-	private HuespedServicio huespedServicio;
-	private AlojamientoServicio alojamientoServicio;
-	private boolean alojamientosCargados;
+    private HuespedServicio huespedServicio;
+    private AlojamientoServicio alojamientoServicio;
+    private boolean alojamientosCargados;
 
-	public ReservaServicio() {
-		reservaDAO = new ReservaArchivoDAO();
-		huespedServicio = new HuespedServicio();
-		alojamientoServicio = new AlojamientoServicio();
-		alojamientosCargados = false;
-	}
+    public ReservaServicio() {
+        reservaDAO = new ReservaArchivoDAO();
+        huespedServicio = new HuespedServicio();
+        alojamientoServicio = new AlojamientoServicio();
+        alojamientosCargados = false;
+    }
 
-	public boolean crearReserva(String id, String idHuesped, String idAlojamiento, String fechaLlegada,
-			String fechaSalida, int numeroHuespedes, int numeroNoches) throws IOException {
+    public boolean crearReserva(
+            String id,
+            String idHuesped,
+            String idAlojamiento,
+            String fechaLlegada,
+            String fechaSalida,
+            int numeroHuespedes,
+            int numeroNoches) throws IOException {
 
-		if (id == null || id.trim().isEmpty() || fechaLlegada == null || fechaSalida == null || numeroNoches <= 0) {
-			return false;
-		}
+        if (id == null || id.trim().isEmpty()
+                || idHuesped == null || idHuesped.trim().isEmpty()
+                || idAlojamiento == null || idAlojamiento.trim().isEmpty()
+                || fechaLlegada == null || fechaLlegada.trim().isEmpty()
+                || fechaSalida == null || fechaSalida.trim().isEmpty()
+                || numeroHuespedes <= 0
+                || numeroNoches <= 0) {
+            return false;
+        }
 
-		Huesped huesped = huespedServicio.buscarPorId(idHuesped);
+        if (!fechasValidas(fechaLlegada, fechaSalida)) {
+            return false;
+        }
 
-		if (huesped == null) {
-			return false;
-		}
+        Huesped huesped = huespedServicio.buscarPorId(idHuesped);
 
-		if (!alojamientosCargados) {
-			alojamientoServicio.cargarDatosIniciales();
-			alojamientosCargados = true;
-		}
+        if (huesped == null) {
+            return false;
+        }
 
-		Alojamiento alojamiento = alojamientoServicio.consultarDetalle(idAlojamiento);
+        if (!alojamientosCargados) {
+            alojamientoServicio.cargarDatosIniciales();
+            alojamientosCargados = true;
+        }
 
-		if (alojamiento == null || !alojamiento.isActivo()) {
-			return false;
-		}
+        Alojamiento alojamiento =
+                alojamientoServicio.consultarDetalle(idAlojamiento);
 
-		if (!alojamiento.PuedeResivir(numeroHuespedes)) {
-			return false;
-		}
+        if (alojamiento == null || !alojamiento.isActivo()) {
+            return false;
+        }
 
-		double valorTotal = alojamiento.calcularValorReserva(numeroNoches);
+        if (!alojamiento.PuedeResivir(numeroHuespedes)) {
+            return false;
+        }
 
-		ReservaDTO reserva = new ReservaDTO(id, idHuesped, idAlojamiento, fechaLlegada, fechaSalida, numeroHuespedes,
-				numeroNoches, valorTotal, Reserva.CONFIRMADA);
+        double valorTotal =
+                alojamiento.calcularValorReserva(numeroNoches);
 
-		return reservaDAO.guardar(reserva);
-	}
+        ReservaDTO reserva = new ReservaDTO(
+                id.trim(),
+                idHuesped.trim(),
+                idAlojamiento.trim(),
+                fechaLlegada.trim(),
+                fechaSalida.trim(),
+                numeroHuespedes,
+                numeroNoches,
+                valorTotal,
+                Reserva.CONFIRMADA
+        );
 
-	public ArrayList<ReservaDTO> consultarReservas() throws IOException {
-		return reservaDAO.cargarTodas();
-	}
+        return reservaDAO.guardar(reserva);
+    }
 
-	public ReservaDTO buscarPorId(String id) throws IOException {
-		return reservaDAO.buscarPorId(id);
-	}
+    private boolean fechasValidas(
+            String fechaLlegada, String fechaSalida) {
+        try {
+            LocalDate llegada = LocalDate.parse(fechaLlegada.trim());
+            LocalDate salida = LocalDate.parse(fechaSalida.trim());
 
-	public boolean cancelarReserva(String id) throws IOException {
-		ReservaDTO reserva = reservaDAO.buscarPorId(id);
+            return salida.isAfter(llegada);
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
 
-		if (reserva == null) {
-			return false;
-		}
+    public ArrayList<ReservaDTO> consultarReservas() throws IOException {
+        return reservaDAO.cargarTodas();
+    }
 
-		if (Reserva.CANCELADA.equals(reserva.getEstado())) {
-			return false;
-		}
+    public ReservaDTO buscarPorId(String id) throws IOException {
+        if (id == null || id.trim().isEmpty()) {
+            return null;
+        }
 
-		reserva.setEstado(Reserva.CANCELADA);
-		return reservaDAO.actualizar(reserva);
-	}
+        return reservaDAO.buscarPorId(id.trim());
+    }
+
+    public boolean cancelarReserva(String id) throws IOException {
+        if (id == null || id.trim().isEmpty()) {
+            return false;
+        }
+
+        ReservaDTO reserva = reservaDAO.buscarPorId(id.trim());
+
+        if (reserva == null) {
+            return false;
+        }
+
+        if (Reserva.CANCELADA.equals(reserva.getEstado())) {
+            return false;
+        }
+
+        reserva.setEstado(Reserva.CANCELADA);
+        return reservaDAO.actualizar(reserva);
+    }
 }
