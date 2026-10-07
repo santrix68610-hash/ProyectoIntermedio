@@ -12,7 +12,7 @@ public class VistaConsola {
 	public void mostrarMenu() {
 		System.out.println("\n--- MENÚ DE ALOJAMIENTOS ---");
 		System.out.println("1. Consultar todos los alojamientos");
-		System.out.println("2. Buscar por ciudad, tipo o capacidad");
+		System.out.println("2. Buscar por ciudad, tipo, capacidad y precio");
 		System.out.println("3. Consultar detalle por ID");
 		System.out.println("4. Crear reserva");
 		System.out.println("5. Registrar huésped");
@@ -21,9 +21,47 @@ public class VistaConsola {
 	}
 
 	public int leerEntero(String mensaje) {
-		System.out.print(mensaje);
-		int numero = teclado.nextInt();
-		teclado.nextLine();
+		int numero = 0;
+		boolean valido = false;
+
+		while (!valido) {
+			System.out.print(mensaje);
+
+			if (teclado.hasNextInt()) {
+				numero = teclado.nextInt();
+				teclado.nextLine();
+				valido = true;
+			} else {
+				System.out.println("Ingresa un número entero válido.");
+				teclado.nextLine();
+			}
+		}
+
+		return numero;
+	}
+
+	public double leerDouble(String mensaje) {
+		double numero = 0;
+		boolean valido = false;
+
+		while (!valido) {
+			System.out.print(mensaje);
+
+			if (teclado.hasNextDouble()) {
+				numero = teclado.nextDouble();
+				teclado.nextLine();
+
+				if (numero >= 0) {
+					valido = true;
+				} else {
+					System.out.println("El precio no puede ser negativo.");
+				}
+			} else {
+				System.out.println("Ingresa un número válido.");
+				teclado.nextLine();
+			}
+		}
+
 		return numero;
 	}
 

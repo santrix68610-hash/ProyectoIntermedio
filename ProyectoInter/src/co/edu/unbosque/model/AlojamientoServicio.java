@@ -38,32 +38,29 @@ public class AlojamientoServicio {
 		return new ArrayList<Alojamiento>(alojamientos);
 	}
 
-	public ArrayList<Alojamiento> buscar(
-	        String ciudad, String tipo, int capacidadMinima, double precioMaximo) {
+	public ArrayList<Alojamiento> buscar(String ciudad, String tipo, int capacidadMinima, double precioMaximo) {
 
-	    ArrayList<Alojamiento> encontrados = new ArrayList<Alojamiento>();
+		ArrayList<Alojamiento> encontrados = new ArrayList<Alojamiento>();
 
-	    for (int i = 0; i < alojamientos.size(); i++) {
-	        Alojamiento alojamiento = alojamientos.get(i);
+		for (int i = 0; i < alojamientos.size(); i++) {
+			Alojamiento alojamiento = alojamientos.get(i);
 
-	        boolean coincideCiudad = ciudad == null  ciudad.trim().isEmpty()
-	                 alojamiento.getCiudad().equalsIgnoreCase(ciudad.trim());
+			boolean coincideCiudad = ciudad == null || ciudad.trim().isEmpty()
+					|| alojamiento.getCiudad().equalsIgnoreCase(ciudad.trim());
 
-	        boolean coincideTipo = tipo == null  tipo.trim().isEmpty()
-	                 alojamiento.getTipo().equalsIgnoreCase(tipo.trim());
+			boolean coincideTipo = tipo == null || tipo.trim().isEmpty()
+					|| alojamiento.getTipo().equalsIgnoreCase(tipo.trim());
 
-	        boolean cumpleCapacidad = capacidadMinima <= 0
-	                 alojamiento.getCapacidad() >= capacidadMinima;
+			boolean cumpleCapacidad = capacidadMinima <= 0 || alojamiento.getCapacidad() >= capacidadMinima;
 
-	        boolean cumplePrecio = precioMaximo <= 0
-	                 alojamiento.getPreciopornoche() <= precioMaximo;
+			boolean cumplePrecio = precioMaximo <= 0 || alojamiento.getPreciopornoche() <= precioMaximo;
 
-	        if (coincideCiudad && coincideTipo && cumpleCapacidad && cumplePrecio) {
-	            encontrados.add(alojamiento);
-	        }
-	    }
+			if (coincideCiudad && coincideTipo && cumpleCapacidad && cumplePrecio) {
+				encontrados.add(alojamiento);
+			}
+		}
 
-	    return encontrados;
+		return encontrados;
 	}
 
 	public Alojamiento consultarDetalle(String id) {
