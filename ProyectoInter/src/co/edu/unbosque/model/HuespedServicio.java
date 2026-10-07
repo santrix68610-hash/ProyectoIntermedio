@@ -9,48 +9,58 @@ import co.edu.unbosque.persistence.HuespedDAO;
 import co.edu.unbosque.persistence.HuespedDTO;
 
 public class HuespedServicio {
-	   private HuespedDAO huespedDAO;
-	    private DataMapper dataMapper;
+	private HuespedDAO huespedDAO;
+	private DataMapper dataMapper;
 
-	    public HuespedServicio() {
-	        huespedDAO = new HuespedArchivoDAO();
-	        dataMapper = new DataMapper();
-	    }
+	public HuespedServicio() {
+		huespedDAO = new HuespedArchivoDAO();
+		dataMapper = new DataMapper();
+	}
 
-	    public boolean registrarHuesped(Huesped huesped) throws IOException {
-	        if (huesped == null) {
-	            return false;
-	        }
+	public boolean registrarHuesped(Huesped huesped) throws IOException {
+		if (huesped == null || huesped.getId() == null || huesped.getId().trim().isEmpty()
+				|| huesped.getNombre() == null || huesped.getNombre().trim().isEmpty() || huesped.getApellido() == null
+				|| huesped.getApellido().trim().isEmpty() || huesped.getCorreo() == null
+				|| huesped.getCorreo().trim().isEmpty() || huesped.getTelefono() == null
+				|| huesped.getTelefono().trim().isEmpty()) {
+			return false;
+		}
 
-	        HuespedDTO huespedDTO = dataMapper.convertirAHuespedDTO(huesped);
-	        return huespedDAO.guardar(huespedDTO);
-	    }
+		String id = huesped.getId().trim();
 
-	    public Huesped buscarPorId(String id) throws IOException {
-	        HuespedDTO huespedDTO = huespedDAO.buscarPorId(id);
+		if (huespedDAO.buscarPorId(id) != null) {
+			return false;
+		}
 
-	        if (huespedDTO == null) {
-	            return null;
-	        }
+		huesped.setId(id);
 
-	        return dataMapper.convertirAHuesped(huespedDTO);
-	    }
+		HuespedDTO huespedDTO = dataMapper.convertirAHuespedDTO(huesped);
 
-	    public ArrayList<Huesped> consultarTodos() throws IOException {
-	        ArrayList<Huesped> huespedes = new ArrayList<Huesped>();
-	        ArrayList<HuespedDTO> huespedesDTO = huespedDAO.cargarTodos();
+		return huespedDAO.guardar(huespedDTO);
+	}
 
-	        for (int i = 0; i < huespedesDTO.size(); i++) {
-	            Huesped huesped =
-	                    dataMapper.convertirAHuesped(huespedesDTO.get(i));
+	public Huesped buscarPorId(String id) throws IOException {
+		HuespedDTO huespedDTO = huespedDAO.buscarPorId(id);
 
-	            if (huesped != null) {
-	                huespedes.add(huesped);
-	            }
-	        }
+		if (huespedDTO == null) {
+			return null;
+		}
 
-	        return huespedes;
-	    }
-	
+		return dataMapper.convertirAHuesped(huespedDTO);
+	}
 
+	public ArrayList<Huesped> consultarTodos() throws IOException {
+		ArrayList<Huesped> huespedes = new ArrayList<Huesped>();
+		ArrayList<HuespedDTO> huespedesDTO = huespedDAO.cargarTodos();
+
+		for (int i = 0; i < huespedesDTO.size(); i++) {
+			Huesped huesped = dataMapper.convertirAHuesped(huespedesDTO.get(i));
+
+			if (huesped != null) {
+				huespedes.add(huesped);
+			}
+		}
+
+		return huespedes;
+	}
 }
