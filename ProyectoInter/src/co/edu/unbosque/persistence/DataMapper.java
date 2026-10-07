@@ -57,15 +57,15 @@ public class DataMapper {
 		} else if (tipo.equalsIgnoreCase("Casa")) {
 			return new Casa(dto.getId(), dto.getNombre(), dto.getCiudad(), tipo, dto.getUbicacion(), dto.getCapacidad(),
 					dto.getPrecioPorNoche(), dto.isActivo(), dto.getDescripcion(), servicios, "ACTIVO", "INACTIVO",
-					dto.getarifaAdicional());
+					dto.getTarifaAdicional());
 		} else if (tipo.equalsIgnoreCase("Cabaña")) {
 			return new Cabaña(dto.getId(), dto.getNombre(), dto.getCiudad(), tipo, dto.getUbicacion(),
 					dto.getCapacidad(), dto.getPrecioPorNoche(), dto.isActivo(), dto.getDescripcion(), servicios,
-					"ACTIVO", "INACTIVO", dto.gettarifaAdicional());
+					"ACTIVO", "INACTIVO", dto.getTarifaAdicional());
 		} else if (tipo.equalsIgnoreCase("Finca")) {
 			return new Finca(dto.getId(), dto.getNombre(), dto.getCiudad(), tipo, dto.getUbicacion(),
 					dto.getCapacidad(), dto.getPrecioPorNoche(), dto.isActivo(), dto.getDescripcion(), servicios,
-					"ACTIVO", "INACTIVO", dto.gettarifaAdicional());
+					"ACTIVO", "INACTIVO", dto.getTarifaAdicional());
 		}
 
 		return null;
