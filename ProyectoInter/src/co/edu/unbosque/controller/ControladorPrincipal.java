@@ -5,11 +5,13 @@ import java.util.ArrayList;
 
 import co.edu.unbosque.model.Alojamiento;
 import co.edu.unbosque.model.AlojamientoServicio;
+import co.edu.unbosque.model.ReservaServicio;
 
 public class ControladorPrincipal {
 
     private AlojamientoServicio alojamientoServicio;
     private VistaConsola vista;
+    private ReservaServicio reservaServicio = new ReservaServicio();
 
     public ControladorPrincipal() {
         alojamientoServicio = new AlojamientoServicio();
@@ -60,4 +62,12 @@ public class ControladorPrincipal {
 
         vista.mostrarMensaje("Programa terminado.");
     }
+
+	public ReservaServicio getReservaServicio() {
+		return reservaServicio;
+	}
+
+	public void setReservaServicio(ReservaServicio reservaServicio) {
+		this.reservaServicio = reservaServicio;
+	}
 }
