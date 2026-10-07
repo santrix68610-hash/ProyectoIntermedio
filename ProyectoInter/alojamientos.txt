@@ -1,0 +1,1 @@
+CASA01;Casa Familiar;Medellin;Casa;El Poblado;6;150000;true;Casa con cocina;25000;Wifi,Parqueadero
