@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ReservaArchivoDAO implements ReservaDAO {
+
 	private String nombreArchivo = "reservas.txt";
 	private ArchivoTexto archivoTexto = new ArchivoTexto();
 
@@ -13,20 +14,48 @@ public class ReservaArchivoDAO implements ReservaDAO {
 				+ reserva.getNumeroNoches() + ";" + reserva.getValorTotal() + ";" + reserva.getEstado();
 	}
 
+	private boolean textoValido(String texto) {
+		return texto != null && !texto.trim().isEmpty();
+	}
+
 	@Override
 	public ArrayList<ReservaDTO> cargarTodas() throws IOException {
 		ArrayList<ReservaDTO> reservas = new ArrayList<ReservaDTO>();
 		ArrayList<String> lineas = archivoTexto.leerLineas(nombreArchivo);
 
 		for (String linea : lineas) {
-			String[] datos = linea.split(";");
+			String[] datos = linea.split(";", -1);
 
-			if (datos.length == 9) {
-				ReservaDTO reserva = new ReservaDTO(datos[0], datos[1], datos[2], datos[3], datos[4],
-						Integer.parseInt(datos[5]), Integer.parseInt(datos[6]), Double.parseDouble(datos[7]), datos[8]);
-
-				reservas.add(reserva);
+			if (datos.length != 9) {
+				continue;
 			}
+
+			if (!textoValido(datos[0]) || !textoValido(datos[1]) || !textoValido(datos[2]) || !textoValido(datos[3])
+					|| !textoValido(datos[4]) || !textoValido(datos[8])) {
+				continue;
+			}
+
+			int numeroHuespedes;
+			int numeroNoches;
+			double valorTotal;
+
+			try {
+				numeroHuespedes = Integer.parseInt(datos[5].trim());
+				numeroNoches = Integer.parseInt(datos[6].trim());
+				valorTotal = Double.parseDouble(datos[7].trim());
+			} catch (NumberFormatException e) {
+				continue;
+			}
+
+			if (numeroHuespedes <= 0 || numeroNoches <= 0 || valorTotal < 0 || Double.isNaN(valorTotal)
+					|| Double.isInfinite(valorTotal)) {
+				continue;
+			}
+
+			ReservaDTO reserva = new ReservaDTO(datos[0].trim(), datos[1].trim(), datos[2].trim(), datos[3].trim(),
+					datos[4].trim(), numeroHuespedes, numeroNoches, valorTotal, datos[8].trim());
+
+			reservas.add(reserva);
 		}
 
 		return reservas;
@@ -34,10 +63,14 @@ public class ReservaArchivoDAO implements ReservaDAO {
 
 	@Override
 	public ReservaDTO buscarPorId(String id) throws IOException {
+		if (!textoValido(id)) {
+			return null;
+		}
+
 		ArrayList<ReservaDTO> reservas = cargarTodas();
 
 		for (ReservaDTO reserva : reservas) {
-			if (reserva.getId().equals(id)) {
+			if (reserva.getId().equals(id.trim())) {
 				return reserva;
 			}
 		}
@@ -47,12 +80,17 @@ public class ReservaArchivoDAO implements ReservaDAO {
 
 	@Override
 	public boolean guardar(ReservaDTO reserva) throws IOException {
+		if (reserva == null || !textoValido(reserva.getId())) {
+			return false;
+		}
+
 		ArrayList<String> lineas = archivoTexto.leerLineas(nombreArchivo);
+		String idBuscado = reserva.getId().trim();
 
 		for (String linea : lineas) {
-			String[] datos = linea.split(";");
+			String[] datos = linea.split(";", -1);
 
-			if (datos.length == 9 && datos[0].equals(reserva.getId())) {
+			if (datos.length > 0 && datos[0].trim().equals(idBuscado)) {
 				return false;
 			}
 		}
@@ -64,12 +102,18 @@ public class ReservaArchivoDAO implements ReservaDAO {
 
 	@Override
 	public boolean actualizar(ReservaDTO reserva) throws IOException {
+		if (reserva == null || !textoValido(reserva.getId())) {
+			return false;
+		}
+
 		ArrayList<String> lineas = archivoTexto.leerLineas(nombreArchivo);
+		String idBuscado = reserva.getId().trim();
 		boolean encontrada = false;
 
 		for (int i = 0; i < lineas.size(); i++) {
-			String[] datos = lineas.get(i).split(";");
-			if (datos.length == 9 && datos[0].equals(reserva.getId())) {
+			String[] datos = lineas.get(i).split(";", -1);
+
+			if (datos.length == 9 && datos[0].trim().equals(idBuscado)) {
 				lineas.set(i, convertirARegistro(reserva));
 				encontrada = true;
 				break;
@@ -83,5 +127,4 @@ public class ReservaArchivoDAO implements ReservaDAO {
 		archivoTexto.escribirLineas(nombreArchivo, lineas);
 		return true;
 	}
-
 }
