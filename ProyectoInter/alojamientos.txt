@@ -1,1 +1,4 @@
 CASA01;Casa Familiar;Medellin;Casa;El Poblado;6;150000;true;Casa con cocina;25000;Wifi,Parqueadero
+APT01;Apartamento Centro;Bogota;Apartamento;Chapinero;4;120000;true;Apartamento amoblado;0;Wifi,Ascensor
+CAB01;Cabana Guatape;Guatape;Cabaña;Vereda El Lago;5;180000;true;Cabana cerca del lago;30000;Wifi,Chimenea
+FIN01;Finca Campestre;La Mesa;Finca;Sector Rural;10;300000;true;Finca con piscina;50000;Piscina,Parqueadero
