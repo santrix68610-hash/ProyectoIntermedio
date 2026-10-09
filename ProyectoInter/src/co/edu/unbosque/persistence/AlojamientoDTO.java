@@ -44,7 +44,6 @@ public class AlojamientoDTO {
 				new ArrayList<String>(), 0.0);
 	}
 
-	// Conserva también el constructor que ya existía en el archivo publicado.
 	public AlojamientoDTO(double tarifaAdicional, String id, String nombre, String ciudad, String tipo,
 			String ubicacion, int capacidad, double precioPorNoche, boolean activo, String descripcion,
 			List<String> serviciosAdicionales) {
