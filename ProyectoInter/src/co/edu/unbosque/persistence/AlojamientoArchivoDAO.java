@@ -4,11 +4,28 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase de persistencia encargada de gestionar el almacenamiento y recuperación 
+ * de los datos de alojamientos en un archivo de texto, implementando la interfaz {@link AlojamientoDAO}.
+ * 
+ * @author Universidad El Bosque
+ * @version 1.0
+ */
 public class AlojamientoArchivoDAO implements AlojamientoDAO {
 
+	/** Nombre del archivo de texto donde se almacenan los registros de alojamientos. */
 	private String nombreArchivo = "alojamientos.txt";
+	
+	/** Instancia auxiliar para la lectura y escritura de líneas en archivos de texto. */
 	private ArchivoTexto archivoTexto = new ArchivoTexto();
 
+	/**
+	 * Convierte un objeto {@link AlojamientoDTO} en una cadena de texto estructurada con punto y coma (;)
+	 * para su posterior almacenamiento en el archivo.
+	 * 
+	 * @param alojamiento el objeto {@link AlojamientoDTO} a convertir
+	 * @return una cadena de texto con los atributos del alojamiento separados por delimitadores
+	 */
 	private String convertirARegistro(AlojamientoDTO alojamiento) {
 		String servicios = "";
 		List<String> listaServicios = alojamiento.getServiciosAdicionales();
@@ -28,10 +45,23 @@ public class AlojamientoArchivoDAO implements AlojamientoDAO {
 				+ ";" + alojamiento.getTarifaAdicional() + ";" + servicios;
 	}
 
+	/**
+	 * Valida que una cadena de texto no sea nula ni contenga únicamente espacios en blanco.
+	 * 
+	 * @param texto la cadena de texto a validar
+	 * @return true si el texto es válido y no está vacío; false en caso contrario
+	 */
 	private boolean textoValido(String texto) {
 		return texto != null && !texto.trim().isEmpty();
 	}
 
+	/**
+	 * Carga y lee todos los registros de alojamientos almacenados en el archivo de texto,
+	 * validando su formato, tipos de datos y convirtiéndolos en objetos {@link AlojamientoDTO}.
+	 * 
+	 * @return un {@link ArrayList} con todos los objetos {@link AlojamientoDTO} válidos encontrados en el archivo
+	 * @throws IOException si ocurre algún error de entrada o salida durante la lectura del archivo
+	 */
 	@Override
 	public ArrayList<AlojamientoDTO> cargarTodos() throws IOException {
 		ArrayList<AlojamientoDTO> alojamientos = new ArrayList<AlojamientoDTO>();
@@ -99,6 +129,13 @@ public class AlojamientoArchivoDAO implements AlojamientoDAO {
 		return alojamientos;
 	}
 
+	/**
+	 * Busca un alojamiento específico en el archivo de texto a partir de su identificador único.
+	 * 
+	 * @param id el identificador único del alojamiento a buscar
+	 * @return el objeto {@link AlojamientoDTO} correspondiente si se encuentra; o null en caso contrario
+	 * @throws IOException si ocurre algún error de entrada o salida al leer los datos
+	 */
 	@Override
 	public AlojamientoDTO buscarPorId(String id) throws IOException {
 		if (id == null || id.trim().isEmpty()) {
@@ -116,6 +153,14 @@ public class AlojamientoArchivoDAO implements AlojamientoDAO {
 		return null;
 	}
 
+	/**
+	 * Valida que el alojamiento sea válido y que su identificador no exista previamente,
+	 * procediendo a agregarlo y guardarlo en el archivo de texto.
+	 * 
+	 * @param alojamiento el objeto {@link AlojamientoDTO} que se desea guardar
+	 * @return true si el alojamiento se guardó con éxito; false si el objeto es nulo, inválido o el ID ya existe
+	 * @throws IOException si ocurre algún error de entrada o salida durante la escritura en el archivo
+	 */
 	@Override
 	public boolean guardar(AlojamientoDTO alojamiento) throws IOException {
 		if (alojamiento == null || !textoValido(alojamiento.getId())) {

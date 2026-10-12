@@ -11,6 +11,14 @@ import co.edu.unbosque.model.ReporteServicio;
 import co.edu.unbosque.model.ReservaServicio;
 import co.edu.unbosque.persistence.ReservaDTO;
 
+/**
+ * Controlador principal de la aplicación que gestiona el flujo del sistema,
+ * la interacción con el usuario a través de la consola y la coordinación entre
+ * los diferentes servicios (alojamientos, huéspedes, reservas y reportes).
+ * 
+ * @author Universidad El Bosque
+ * @version 1.0
+ */
 public class ControladorPrincipal {
 
 	private AlojamientoServicio alojamientoServicio;
@@ -19,6 +27,10 @@ public class ControladorPrincipal {
 	private ReporteServicio reporteServicio;
 	private VistaConsola vista;
 
+	/**
+	 * Constructor de la clase ControladorPrincipal.
+	 * Inicializa las instancias de los servicios de alojamiento, huésped, reserva, reporte y la vista de consola.
+	 */
 	public ControladorPrincipal() {
 		alojamientoServicio = new AlojamientoServicio();
 		huespedServicio = new HuespedServicio();
@@ -27,6 +39,12 @@ public class ControladorPrincipal {
 		vista = new VistaConsola();
 	}
 
+	/**
+	 * Inicia el flujo principal de la aplicación, cargando los datos iniciales
+	 * y mostrando el menú interactivo en consola para gestionar las opciones del sistema.
+	 * 
+	 * @throws IOException si ocurre algún error de entrada o salida durante la lectura de datos por consola
+	 */
 	public void iniciar() throws IOException {
 		alojamientoServicio.cargarDatosIniciales();
 
@@ -98,6 +116,12 @@ public class ControladorPrincipal {
 		vista.mostrarMensaje("Programa terminado.");
 	}
 
+	/**
+	 * Gestiona el proceso de creación de una nueva reserva solicitando los datos necesarios
+	 * al usuario mediante la consola y validando su ejecución con el servicio de reservas.
+	 * 
+	 * @throws IOException si ocurre algún error de entrada o salida durante la lectura de datos
+	 */
 	private void crearReserva() throws IOException {
 		String id = vista.leerTexto("ID de la reserva: ");
 		String idHuesped = vista.leerTexto("ID del huésped: ");
@@ -118,6 +142,12 @@ public class ControladorPrincipal {
 		}
 	}
 
+	/**
+	 * Gestiona el proceso de registro de un nuevo huésped solicitando la información requerida
+	 * por consola y almacenándola mediante el servicio de huéspedes.
+	 * 
+	 * @throws IOException si ocurre algún error de entrada o salida durante la lectura de datos
+	 */
 	private void registrarHuesped() throws IOException {
 		String id = vista.leerTexto("ID del huésped: ");
 		String nombre = vista.leerTexto("Nombre: ");
@@ -135,6 +165,12 @@ public class ControladorPrincipal {
 		}
 	}
 
+	/**
+	 * Gestiona la cancelación de una reserva existente solicitando el identificador al usuario
+	 * y procesando la solicitud a través del servicio de reservas.
+	 * 
+	 * @throws IOException si ocurre algún error de entrada o salida durante la lectura de datos
+	 */
 	private void cancelarReserva() throws IOException {
 		String id = vista.leerTexto("ID de la reserva que quieres cancelar: ");
 		boolean cancelada = reservaServicio.cancelarReserva(id);
@@ -146,10 +182,20 @@ public class ControladorPrincipal {
 		}
 	}
 
+	/**
+	 * Obtiene el servicio de reservas asociado al controlador.
+	 * 
+	 * @return la instancia actual de {@link ReservaServicio}
+	 */
 	public ReservaServicio getReservaServicio() {
 		return reservaServicio;
 	}
 
+	/**
+	 * Establece o actualiza el servicio de reservas para este controlador.
+	 * 
+	 * @param reservaServicio la nueva instancia de {@link ReservaServicio} a asignar
+	 */
 	public void setReservaServicio(ReservaServicio reservaServicio) {
 		this.reservaServicio = reservaServicio;
 	}
